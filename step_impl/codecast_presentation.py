@@ -57,8 +57,9 @@ def presentation_user(username):
 @continue_on_failure
 @step("there will be no codecasts presented")
 def count_of_codecasts():
-	codecasts = PresentCodecastsUseCase().present_codecasts()
-	assert len(codecasts) == 0
+	logged_in_user = Context.gatekeeper.get_logged_in_user()
+	presentations = PresentCodecastsUseCase().present_codecasts(logged_in_user)
+	assert len(presentations) == 0
 
 
 @continue_on_failure
