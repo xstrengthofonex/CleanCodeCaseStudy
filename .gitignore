@@ -96,3 +96,5 @@ venv/
 .ropeproject
 
 .gauge/
+
+.mypy_cache/
