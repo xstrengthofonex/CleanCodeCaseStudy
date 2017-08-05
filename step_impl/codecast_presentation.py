@@ -1,9 +1,12 @@
 from getgauge.python import step, after_scenario, before_scenario, continue_on_failure
 
+from CleanCodeCaseStudy.context import Context
+from CleanCodeCaseStudy.mock_gateway import MockGateway
+
 
 @before_scenario
 def setup():
-	pass
+	Context.gateway = MockGateway()
 
 
 @after_scenario
@@ -14,7 +17,10 @@ def teardown():
 @continue_on_failure
 @step("given no codecasts")
 def clear_codecasts():
-	assert False
+	codecasts = Context.gateway.find_all_codecasts()
+	for codecast in codecasts:
+		Context.gateway.delete(codecast)
+	assert len(Context.gateway.find_all_codecasts()) == 0
 
 
 @continue_on_failure
