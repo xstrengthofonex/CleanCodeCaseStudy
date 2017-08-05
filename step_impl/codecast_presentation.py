@@ -1,3 +1,5 @@
+from copy import copy
+
 from getgauge.python import step, after_scenario, before_scenario, continue_on_failure
 
 from CleanCodeCaseStudy.context import Context
@@ -18,7 +20,7 @@ def teardown():
 @step("given no codecasts")
 def clear_codecasts():
 	codecasts = Context.gateway.find_all_codecasts()
-	for codecast in codecasts:
+	for codecast in copy(codecasts):
 		Context.gateway.delete(codecast)
 	assert len(Context.gateway.find_all_codecasts()) == 0
 

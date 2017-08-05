@@ -2,8 +2,14 @@ from CleanCodeCaseStudy.gateway import Gateway
 
 
 class MockGateway(Gateway):
-	def delete(self):
-		pass
+	def __init__(self):
+		self.codecasts = []
+
+	def delete(self, codecast):
+		self.codecasts.remove(codecast)
 
 	def find_all_codecasts(self):
-		return []
+		return self.codecasts
+
+	def save(self, codecast):
+		self.codecasts.append(codecast)

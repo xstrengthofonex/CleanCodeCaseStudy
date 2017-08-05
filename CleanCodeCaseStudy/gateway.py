@@ -7,5 +7,10 @@ class Gateway(metaclass=ABCMeta):
 		pass
 
 	@abstractmethod
-	def delete(self):
+	def delete(self, entity):
 		pass
+
+	@abstractmethod
+	def save(self, entity):
+		pass
+
