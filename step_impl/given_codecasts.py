@@ -9,5 +9,5 @@ from CleanCodeCaseStudy.context import Context
 def given_codecasts(table):
 	for row in table:
 		codecast = Codecast(row[0], row[1])
-		Context.gateway.save(codecast)
+		Context.gateway.save_codecast(codecast)
 

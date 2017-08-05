@@ -11,6 +11,13 @@ class Gateway(metaclass=ABCMeta):
 		pass
 
 	@abstractmethod
-	def save(self, entity):
+	def save_codecast(self, codecast):
 		pass
 
+	@abstractmethod
+	def save_user(self, user):
+		pass
+
+	@abstractmethod
+	def find_user(self, username):
+		pass
