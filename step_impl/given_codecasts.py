@@ -1,7 +1,7 @@
 from getgauge.python import step, continue_on_failure
 
-from CleanCodeCaseStudy.codecast import Codecast
-from CleanCodeCaseStudy.context import Context
+from cleancoderscom.codecast import Codecast
+from cleancoderscom.context import Context
 
 
 @continue_on_failure

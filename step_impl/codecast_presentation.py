@@ -2,11 +2,12 @@ from copy import copy
 
 from getgauge.python import step, after_scenario, before_scenario, continue_on_failure
 
-from CleanCodeCaseStudy.context import Context
-from CleanCodeCaseStudy.gatekeeper import GateKeeper
-from CleanCodeCaseStudy.mock_gateway import MockGateway
-from CleanCodeCaseStudy.present_codecasts_use_case import PresentCodecastsUseCase
-from CleanCodeCaseStudy.user import User
+from cleancoderscom.context import Context
+from cleancoderscom.gatekeeper import GateKeeper
+from cleancoderscom.license import License
+from cleancoderscom.mock_gateway import MockGateway
+from cleancoderscom.present_codecasts_use_case import PresentCodecastsUseCase
+from cleancoderscom.user import User
 
 
 @before_scenario
@@ -17,7 +18,8 @@ def setup():
 
 @after_scenario
 def teardown():
-	pass
+	Context.gateway = None
+	Context.gatekeeper = None
 
 
 @continue_on_failure
@@ -65,4 +67,8 @@ def count_of_codecasts():
 @continue_on_failure
 @step("and with license for <username> able to view <codecast>")
 def create_license_for_viewing(username, codecast_title):
-	assert False
+	user = Context.gateway.find_user(username)
+	codecast = Context.gateway.find_codecast_by_title(codecast_title)
+	view_license = License(user, codecast)
+	Context.gateway.save_license(view_license)
+	assert PresentCodecastsUseCase().is_licensed_to_view_codecast(user, codecast)

@@ -21,3 +21,15 @@ class Gateway(metaclass=ABCMeta):
 	@abstractmethod
 	def find_user(self, username):
 		pass
+
+	@abstractmethod
+	def find_codecast_by_title(self, title):
+		pass
+
+	@abstractmethod
+	def save_license(self, view_license):
+		pass
+
+	@abstractmethod
+	def find_license_for(self, user, codecast):
+		pass
