@@ -3,23 +3,20 @@ from copy import copy
 from getgauge.python import step, after_scenario, before_scenario, continue_on_failure
 
 from cleancoderscom.context import Context
-from cleancoderscom.gatekeeper import GateKeeper
 from cleancoderscom.license import License
-from cleancoderscom.mock_gateway import MockGateway
 from cleancoderscom.present_codecasts_use_case import PresentCodecastsUseCase
 from cleancoderscom.user import User
+from tests.test_context import TestContext
 
 
 @before_scenario
 def setup():
-	Context.gateway = MockGateway()
-	Context.gatekeeper = GateKeeper()
+	TestContext.setup()
 
 
 @after_scenario
 def teardown():
-	Context.gateway = None
-	Context.gatekeeper = None
+	TestContext.teardown()
 
 
 @continue_on_failure

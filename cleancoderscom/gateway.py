@@ -33,3 +33,7 @@ class Gateway(metaclass=ABCMeta):
 	@abstractmethod
 	def find_license_for(self, user, codecast):
 		pass
+
+	@abstractmethod
+	def find_all_codecasts_ordered_by_date(self):
+		pass

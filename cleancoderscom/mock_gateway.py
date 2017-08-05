@@ -32,18 +32,23 @@ class MockGateway(Gateway):
 			lambda x: x.user == user and x.codecast == codecast,
 			self.licenses), None)
 
-	def save_codecast(self, codecast: Type[Entity]) -> None:
-		self.save(codecast, self.codecasts)
+	def find_all_codecasts_ordered_by_date(self):
+		return list(sorted(self.find_all_codecasts(),
+						   key=lambda c: c.publication_date))
 
-	def save_user(self, user: Type[Entity]) -> None:
-		self.save(user, self.users)
+	def save_codecast(self, codecast: Type[Entity]) -> Type[Entity]:
+		return self.save(codecast, self.codecasts)
 
-	def save_license(self, viewing_license: Type[Entity]) -> None:
-		self.save(viewing_license, self.licenses)
+	def save_user(self, user: Type[Entity]) -> Type[Entity]:
+		return self.save(user, self.users)
 
-	def save(self, entity: Type[Entity], entities) -> None:
+	def save_license(self, view_license: Type[Entity]) -> Type[Entity]:
+		return self.save(view_license, self.licenses)
+
+	def save(self, entity: Type[Entity], entities) -> Type[Entity]:
 		entity = self.establish_id(entity)
 		entities.append(entity)
+		return entity
 
 	@staticmethod
 	def establish_id(entity: Type[Entity]) -> Type[Entity]:
