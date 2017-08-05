@@ -21,19 +21,19 @@ class PresentCodecastsUseCaseTest(unittest.TestCase):
 		TestContext.teardown()
 
 	def test_user_without_view_license_cannot_view_codecast(self):
-		self.assertFalse(self.use_case.is_licensed_to_view_codecast(
-			self.user, self.codecast))
+		self.assertFalse(self.use_case.is_licensed_for(
+			License.VIEWING, self.user, self.codecast))
 
 	def test_user_with_view_license_can_view_codecast(self):
-		self.create_testable_license(self.user, self.codecast)
-		self.assertTrue(self.use_case.is_licensed_to_view_codecast(
-			self.user, self.codecast))
+		self.create_testable_view_license(self.user, self.codecast)
+		self.assertTrue(self.use_case.is_licensed_for(
+			License.VIEWING, self.user, self.codecast))
 
 	def test_user_with_license_cannot_view_other_users_codecast(self):
 		other_user = self.create_testable_user("OtherUser")
-		self.create_testable_license(other_user, self.codecast)
-		self.assertFalse(self.use_case.is_licensed_to_view_codecast(
-			self.user, self.codecast))
+		self.create_testable_view_license(other_user, self.codecast)
+		self.assertFalse(self.use_case.is_licensed_for(
+			License.VIEWING, self.user, self.codecast))
 
 	def test_present_no_codecasts(self):
 		Context.gateway.delete(self.codecast)
@@ -41,7 +41,7 @@ class PresentCodecastsUseCaseTest(unittest.TestCase):
 		self.assertEqual(0, len(presentable_codecasts))
 
 	def test_present_one_codecast(self):
-		self.create_testable_license(self.user, self.codecast)
+		self.create_testable_view_license(self.user, self.codecast)
 		presentable_codecasts = self.use_case.present_codecasts(self.user)
 		self.assertEqual(1, len(presentable_codecasts))
 		presentable_codecast = presentable_codecasts[0]
@@ -52,10 +52,15 @@ class PresentCodecastsUseCaseTest(unittest.TestCase):
 		presentable_codecasts = self.use_case.present_codecasts(self.user)
 		self.assertFalse(presentable_codecasts[0].is_viewable)
 
-	def test_presented_codecast_is_viewable_with_license(self):
-		self.create_testable_license(self.user, self.codecast)
+	def test_presented_codecast_is_viewable_with_view_license(self):
+		self.create_testable_view_license(self.user, self.codecast)
 		presentable_codecasts = self.use_case.present_codecasts(self.user)
 		self.assertTrue(presentable_codecasts[0].is_viewable)
+
+	def test_presented_codecast_is_downloadable_with_download_license(self):
+		self.create_testable_download_license(self.user, self.codecast)
+		presentable_codecasts = self.use_case.present_codecasts(self.user)
+		self.assertTrue(presentable_codecasts[0].is_downloadable)
 
 	@staticmethod
 	def create_testable_user(username):
@@ -67,5 +72,11 @@ class PresentCodecastsUseCaseTest(unittest.TestCase):
 			Codecast(title, publication_date))
 
 	@staticmethod
-	def create_testable_license(user, codecast):
-		return Context.gateway.save_license(License(user, codecast))
+	def create_testable_view_license(user, codecast):
+		return Context.gateway.save_license(
+			License(user, codecast, License.VIEWING))
+
+	@staticmethod
+	def create_testable_download_license(user, codecast):
+		return Context.gateway.save_license(
+			License(user, codecast, License.DOWNLOADING))

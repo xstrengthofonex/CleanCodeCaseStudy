@@ -66,6 +66,16 @@ def count_of_codecasts():
 def create_license_for_viewing(username, codecast_title):
 	user = Context.gateway.find_user(username)
 	codecast = Context.gateway.find_codecast_by_title(codecast_title)
-	view_license = License(user, codecast)
+	view_license = License(user, codecast, License.VIEWING)
 	Context.gateway.save_license(view_license)
-	assert PresentCodecastsUseCase().is_licensed_to_view_codecast(user, codecast)
+	assert PresentCodecastsUseCase().is_licensed_for(License.VIEWING, user, codecast)
+
+
+@continue_on_failure
+@step("and with license for <username> able to download <codecast>")
+def create_license_downloading(username, codecast_title):
+	user = Context.gateway.find_user(username)
+	codecast = Context.gateway.find_codecast_by_title(codecast_title)
+	view_license = License(user, codecast, License.DOWNLOADING)
+	Context.gateway.save_license(view_license)
+	assert PresentCodecastsUseCase().is_licensed_for(License.DOWNLOADING, user, codecast)
