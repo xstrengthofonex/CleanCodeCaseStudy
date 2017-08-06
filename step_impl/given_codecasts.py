@@ -2,7 +2,7 @@ from getgauge.python import step, continue_on_failure
 
 from cleancoderscom.context import Context
 from cleancoderscom.entities.codecast import Codecast
-from tests.utilities import datetime_from_string
+from cleancoderscom.utilities import datetime_from_string
 
 
 @continue_on_failure

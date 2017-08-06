@@ -5,7 +5,7 @@ from cleancoderscom.entities.codecast import Codecast
 from cleancoderscom.entities.license import License, LicenseType
 from cleancoderscom.entities.user import User
 from cleancoderscom.use_cases.presentable_codecast import PresentableCodecast
-from tests.utilities import string_from_datetime
+from cleancoderscom.utilities import string_from_datetime
 
 
 class PresentCodecastsUseCase(object):
