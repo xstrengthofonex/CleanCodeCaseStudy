@@ -1,8 +1,8 @@
 from enum import Enum
 
-from cleancoderscom.codecast import Codecast
-from cleancoderscom.entity import Entity
-from cleancoderscom.user import User
+from cleancoderscom.entities.codecast import Codecast
+from cleancoderscom.entities.entity import Entity
+from cleancoderscom.entities.user import User
 
 
 class LicenseType(Enum):

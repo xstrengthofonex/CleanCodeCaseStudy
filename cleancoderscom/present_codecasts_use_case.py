@@ -1,17 +1,17 @@
 from typing import List
 
-from cleancoderscom.codecast import Codecast
 from cleancoderscom.context import Context
-from cleancoderscom.license import License, LicenseType
+from cleancoderscom.entities.codecast import Codecast
+from cleancoderscom.entities.license import License, LicenseType
+from cleancoderscom.entities.user import User
 from cleancoderscom.presentable_codecast import PresentableCodecast
-from cleancoderscom.user import User
 from tests.utilities import string_from_datetime
 
 
 class PresentCodecastsUseCase(object):
 	def present_codecasts(self, logged_in_user: User) -> List[PresentableCodecast]:
 		presentable_codecasts = []
-		codecasts = Context.gateway.find_all_codecasts_ordered_by_date()
+		codecasts = Context.codecast_gateway.find_all_codecasts_ordered_by_date()
 		for codecast in codecasts:
 			presentable_codecasts.append(self.format_codecast(codecast, logged_in_user))
 		return presentable_codecasts
@@ -24,7 +24,7 @@ class PresentCodecastsUseCase(object):
 
 	@staticmethod
 	def is_licensed_for(license_type: LicenseType, user: User, codecast: Codecast) -> bool:
-		license_ = Context.gateway.find_license_for(user, codecast)
+		license_ = Context.license_gateway.find_license_for(user, codecast)
 		if license_ and license_.license_type == license_type:
 			return True
 		return False

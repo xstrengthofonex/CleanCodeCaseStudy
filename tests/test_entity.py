@@ -1,6 +1,6 @@
 import unittest
 
-from cleancoderscom.entity import Entity
+from cleancoderscom.entities.entity import Entity
 
 
 class EntityTest(unittest.TestCase):

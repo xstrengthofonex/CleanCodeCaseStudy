@@ -1,12 +1,11 @@
 import unittest
-
 from datetime import date
 
-from cleancoderscom.codecast import Codecast
 from cleancoderscom.context import Context
-from cleancoderscom.license import License
+from cleancoderscom.entities.codecast import Codecast
+from cleancoderscom.entities.license import License
+from cleancoderscom.entities.user import User
 from cleancoderscom.present_codecasts_use_case import PresentCodecastsUseCase
-from cleancoderscom.user import User
 from tests.test_context import TestContext
 
 
@@ -36,7 +35,7 @@ class PresentCodecastsUseCaseTest(unittest.TestCase):
 			License.VIEWING, self.user, self.codecast))
 
 	def test_present_no_codecasts(self):
-		Context.gateway.delete(self.codecast)
+		Context.codecast_gateway.delete(self.codecast)
 		presentable_codecasts = self.use_case.present_codecasts(self.user)
 		self.assertEqual(0, len(presentable_codecasts))
 
@@ -64,19 +63,19 @@ class PresentCodecastsUseCaseTest(unittest.TestCase):
 
 	@staticmethod
 	def create_testable_user(username):
-		return Context.gateway.save_user(User(username))
+		return Context.user_gateway.save(User(username))
 
 	@staticmethod
 	def create_testable_codecast(title, publication_date):
-		return Context.gateway.save_codecast(
+		return Context.codecast_gateway.save(
 			Codecast(title, publication_date))
 
 	@staticmethod
 	def create_testable_view_license(user, codecast):
-		return Context.gateway.save_license(
+		return Context.license_gateway.save(
 			License(user, codecast, License.VIEWING))
 
 	@staticmethod
 	def create_testable_download_license(user, codecast):
-		return Context.gateway.save_license(
+		return Context.license_gateway.save(
 			License(user, codecast, License.DOWNLOADING))
