@@ -10,10 +10,9 @@ Socket = socket.socket
 class SocketServer(object):
 	def __init__(self, port: int, service: SocketService) -> None:
 		self.port = port
-		self.service = service
-		self.running = False
-		self.sock = None
-		self.connections = []
+		self.service: Optional[SocketService] = service
+		self.running: bool = False
+		self.sock: Optional[Socket] = None
 
 	def start(self, timeout: Optional[float]=None) -> None:
 		self.running = True
@@ -31,7 +30,7 @@ class SocketServer(object):
 		self.sock.close()
 		self.sock = None
 
-	def create_socket(self, timeout: Optional[float]=None, queue: int=5) -> Socket:
+	def create_socket(self, timeout: Optional[float]=None, queue: int=5) -> Optional[Socket]:
 		sock = socket.socket(socket.AF_INET, socket.SOL_SOCKET)
 		sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		try:
@@ -41,7 +40,7 @@ class SocketServer(object):
 				sock.settimeout(timeout)
 		except OSError:
 			sock.close()
-			sock = None
+			return None
 		return sock
 
 	def stop(self) -> None:
