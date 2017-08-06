@@ -5,7 +5,7 @@ from tests.gateways.in_memory_license_gateway import InMemoryLicenseGateway
 from tests.gateways.in_memory_user_gateway import InMemoryUserGateway
 
 
-class TestContext(Context):
+class TestSetup(Context):
 	@staticmethod
 	def setup() -> None:
 		Context.user_gateway = InMemoryUserGateway()
@@ -15,5 +15,7 @@ class TestContext(Context):
 
 	@staticmethod
 	def teardown() -> None:
-		Context.gateway = None
+		Context.user_gateway = None
+		Context.license_gateway = None
+		Context.codecast_gateway = None
 		Context.gatekeeper = None

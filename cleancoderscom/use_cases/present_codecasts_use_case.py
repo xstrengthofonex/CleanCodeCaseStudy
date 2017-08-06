@@ -4,7 +4,7 @@ from cleancoderscom.context import Context
 from cleancoderscom.entities.codecast import Codecast
 from cleancoderscom.entities.license import License, LicenseType
 from cleancoderscom.entities.user import User
-from cleancoderscom.presentable_codecast import PresentableCodecast
+from cleancoderscom.use_cases.presentable_codecast import PresentableCodecast
 from tests.utilities import string_from_datetime
 
 

@@ -1,7 +1,7 @@
 from getgauge.python import step, continue_on_failure
 
 from cleancoderscom.context import Context
-from cleancoderscom.present_codecasts_use_case import PresentCodecastsUseCase
+from cleancoderscom.use_cases.present_codecasts_use_case import PresentCodecastsUseCase
 
 boolean_mapper = {"+": True, "-": False}
 

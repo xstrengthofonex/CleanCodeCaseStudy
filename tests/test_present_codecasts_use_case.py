@@ -5,19 +5,19 @@ from cleancoderscom.context import Context
 from cleancoderscom.entities.codecast import Codecast
 from cleancoderscom.entities.license import License
 from cleancoderscom.entities.user import User
-from cleancoderscom.present_codecasts_use_case import PresentCodecastsUseCase
-from tests.test_context import TestContext
+from cleancoderscom.use_cases.present_codecasts_use_case import PresentCodecastsUseCase
+from tests.test_setup import TestSetup
 
 
 class PresentCodecastsUseCaseTest(unittest.TestCase):
 	def setUp(self):
-		TestContext.setup()
+		TestSetup.setup()
 		self.user = self.create_testable_user("User")
 		self.codecast = self.create_testable_codecast("A", date(2017, 8, 2))
 		self.use_case = PresentCodecastsUseCase()
 
 	def tearDown(self):
-		TestContext.teardown()
+		TestSetup.teardown()
 
 	def test_user_without_view_license_cannot_view_codecast(self):
 		self.assertFalse(self.use_case.is_licensed_for(

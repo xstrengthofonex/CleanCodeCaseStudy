@@ -5,18 +5,18 @@ from getgauge.python import step, after_scenario, before_scenario, continue_on_f
 from cleancoderscom.context import Context
 from cleancoderscom.entities.license import License
 from cleancoderscom.entities.user import User
-from cleancoderscom.present_codecasts_use_case import PresentCodecastsUseCase
-from tests.test_context import TestContext
+from cleancoderscom.use_cases.present_codecasts_use_case import PresentCodecastsUseCase
+from tests.test_setup import TestSetup
 
 
 @before_scenario
 def setup():
-	TestContext.setup()
+	TestSetup.setup()
 
 
 @after_scenario
 def teardown():
-	TestContext.teardown()
+	TestSetup.teardown()
 
 
 @continue_on_failure

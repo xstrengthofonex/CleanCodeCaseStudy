@@ -1,0 +1,67 @@
+/* colors
+ feather - #77C9D4
+ marine - #57BC90
+ darker - #57a490
+ sleeky grey - #A5A5AF */
+
+
+body {
+    color: #444;
+}
+
+a {
+    text-decoration: none;
+    color: #444;
+}
+
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 40px;
+    color: #3498db;
+    text-align: center;
+    font-weight: lighter;
+}
+
+.codecasts {
+    font-family: sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 16px;
+    color: #333;
+}
+
+.codecast img{
+    width: 400px;
+}
+
+hr {
+    height: 2px;
+    border: none;
+    background-color: #ddd;
+}
+
+.btn {
+    background-color: #57BC90;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.btn:hover {
+    background-color: #57a490;
+}
+
+.sort-options {
+    text-align: right;
+    padding-bottom: 10px;
+}
+
+.sort-options a {
+    color: #3498db;
+}
+
+.sort-options a:hover {
+    text-decoration: underline;
+}

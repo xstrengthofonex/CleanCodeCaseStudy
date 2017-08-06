@@ -21,15 +21,12 @@ class InMemoryGateway(Gateway):
 		return deepcopy(list(self.entities.values()))
 
 	def find(self, id_: str) -> Optional[Entity]:
-		entity = self.entities.get(id_)
-		if entity:
-			return deepcopy(entity)
-		return None
+		return next(filter(lambda e: e.id_ == id_, self.find_all()), None)
 
 	def save(self, entity: Entity) -> Optional[Entity]:
 		with self.lock:
 			entity = self.establish_id(entity)
-			self.entities[entity.id_] = entity
+			self.entities[entity.id_] = deepcopy(entity)
 			return entity
 
 	@staticmethod
