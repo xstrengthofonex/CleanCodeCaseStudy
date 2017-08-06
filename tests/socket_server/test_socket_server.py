@@ -4,7 +4,7 @@ from threading import Thread
 import time
 
 from cleancoderscom.socket_server import SocketServer
-from tests.socket_server.fake_socket_service import FakeSocketService
+from tests.socket_server.test_socket_service import TestSocketService
 
 
 class TestServerContext(object):
@@ -15,7 +15,7 @@ class TestServerContext(object):
 	def __enter__(self):
 		self.server_thread = Thread(target=self.server.start, kwargs={'timeout': 0.1})
 		self.server_thread.start()
-		time.sleep(0.01)
+		time.sleep(0.001)
 
 	def __exit__(self, *exc):
 		self.server_thread.join()
@@ -42,7 +42,7 @@ class SocketServerTest(unittest.TestCase):
 	def setUp(self):
 		self.port = 3000
 		self.host = "localhost"
-		self.service = FakeSocketService()
+		self.service = TestSocketService()
 		self.server = SocketServer(self.port, self.service)
 
 	def test_instantiate(self):
@@ -57,16 +57,13 @@ class SocketServerTest(unittest.TestCase):
 
 	def test_accepts_an_incoming_connection(self):
 		with self.get_test_server_context():
-			with self.get_test_connection_context():
-				pass
+			self.start_simple_test_connection()
 		self.assertEqual(self.service.connections, 1)
 
 	def test_accepts_multiple_incoming_connections(self):
 		with self.get_test_server_context():
-			with self.get_test_connection_context():
-				pass
-			with self.get_test_connection_context():
-				pass
+			self.start_simple_test_connection()
+			self.start_simple_test_connection()
 		self.assertEqual(self.service.connections, 2)
 
 	def test_can_send_and_recv_data(self):
@@ -77,17 +74,29 @@ class SocketServerTest(unittest.TestCase):
 
 	def test_can_send_and_recv_multiple_messages(self):
 		with self.get_test_server_context():
+			with self.get_test_connection_context() as conn1:
+				conn1.sendall(b"Hello")
+			with self.get_test_connection_context() as conn2:
+				conn2.sendall(b"Test")
+		self.assertEqual(self.service.message, "HelloTest")
+
+	def test_can_echo(self):
+		with self.get_test_server_context():
 			with self.get_test_connection_context() as conn:
 				conn.sendall(b"Hello")
-			with self.get_test_connection_context() as conn:
-				conn.sendall(b"Test")
-		self.assertEqual(self.service.message, "HelloTest")
+				response = conn.recv(1024)
+		self.assertEqual(response, b"Hello")
 
 	def get_test_server_context(self):
 		return TestServerContext(self.server)
 
 	def get_test_connection_context(self):
 		return TestConnectionContext(self.host, self.port)
+
+	def start_simple_test_connection(self):
+		self.conn = socket.socket()
+		self.conn.connect((self.host, self.port))
+		self.conn.close()
 
 
 
