@@ -32,6 +32,14 @@ class SocketServerTest(unittest.TestCase):
 		self.server.stop()
 		self.assertEqual(self.service.connections, 1)
 
+	def test_accepts_multiple_incoming_connections(self):
+		thread = self.start_test_server_thread()
+		self.start_test_connection()
+		self.start_test_connection()
+		thread.join()
+		self.server.stop()
+		self.assertEqual(self.service.connections, 2)
+
 	def start_test_connection(self, data=None):
 		conn = socket.socket()
 		conn.connect((self.host, self.port))

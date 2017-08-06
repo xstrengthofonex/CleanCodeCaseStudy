@@ -1,6 +1,10 @@
 import socket
+from threading import Thread
+from typing import Optional
 
 from cleancoderscom.socket_service import SocketService
+
+Socket = socket.socket
 
 
 class SocketServer(object):
@@ -9,35 +13,38 @@ class SocketServer(object):
 		self.service = service
 		self.running = False
 		self.sock = None
+		self.connections = []
 
-	def start(self, timeout=None) -> None:
+	def start(self, timeout: Optional[float]=None) -> None:
 		self.running = True
-		self.create_socket(timeout)
+		self.sock = self.create_socket(timeout)
 		while self.running:
 			try:
 				conn, addr = self.sock.accept()
-				self.service.serve(conn)
+				service_thread = Thread(target=self.service.serve, args=(conn,))
+				service_thread.start()
+				service_thread.join()
 				conn.close()
 				continue
 			except (socket.timeout, KeyboardInterrupt):
 				break
+		self.sock.close()
+		self.sock = None
 
-	def create_socket(self, timeout):
-		self.sock = socket.socket(socket.AF_INET, socket.SOL_SOCKET)
-		self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+	def create_socket(self, timeout: Optional[float]=None, queue: int=5) -> Socket:
+		sock = socket.socket(socket.AF_INET, socket.SOL_SOCKET)
+		sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		try:
-			self.sock.bind(("localhost", self.port))
-			self.sock.listen(5)
+			sock.bind(("localhost", self.port))
+			sock.listen(queue)
 			if timeout is not None:
-				self.sock.settimeout(timeout)
+				sock.settimeout(timeout)
 		except OSError:
-			self.sock.close()
-			self.sock = None
+			sock.close()
+			sock = None
+		return sock
 
 	def stop(self) -> None:
-		if self.sock is not None:
-			self.sock.close()
-			self.sock = None
 		self.running = False
 
 	def is_running(self) -> bool:
